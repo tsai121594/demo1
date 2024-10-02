@@ -5,19 +5,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
 >
 
 
 <h:head/>
 
 <h:body>
+    <!--    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">-->
     <h:form>
         <p:growl id="growl" sticky="true" showDetail="true"/>
         <p:panelGrid columns="2">
 
             <p:outputLabel value="Enter First Name: " for="@next"/>
             <p:inputText id="firstName" value="#{user.firstName}"/>
+
+            <p:outputLabel value="Enter Country: " for="@next"/>
+            <p:autoComplete id="country" completeMethod="#{user.countryList()}" value="#{user.country}"/>
+
             <p:outputLabel for="lastName">
                 <p:outputLabel value="Enter Last Name: "/>
             </p:outputLabel>
@@ -26,20 +31,26 @@
             <p:outputLabel for="phone">
                 <p:outputLabel value="Enter Phone: "/>
             </p:outputLabel>
-            <p:inputText id="phone" value="#{user.phone}"/>
+            <p:inputMask id="phone" value="#{user.phone}" mask="(999) 999-9999" validateMask="true"/>
 
             <p:outputLabel for="dob">
                 <p:outputLabel value="Enter Date of Birth: "/>
             </p:outputLabel>
-            <p:inputText id="dob" value="#{user.dob}"/>
+            <p:inputMask mask="12/15/1994" validateMask="true" id="dob" value="#{user.dob}"/>
 
             <p:outputLabel for="email">
                 <p:outputLabel value="Email: "/>
             </p:outputLabel>
             <p:inputText id="email" value="#{user.email}"/>
 
-            <p:commandButton value="Submit" action="#{user.showDetails()}" update="growl" process="@this"/>
+            <p:fileUpload fileUploadListener="#{user.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                          update="growl" sizeLimit="10000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+
+
+            <p:commandButton value="Submit" actionListener="#{user.showDetails()}" update="growl"/>
         </p:panelGrid>
     </h:form>
+    <!--    </f:view>-->
+    <h:link value="User Details" outcome="user-details"/>
 </h:body>
 </html>

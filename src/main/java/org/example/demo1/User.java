@@ -1,19 +1,34 @@
 package org.example.demo1;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import org.primefaces.event.FileUploadEvent;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Named(value = "user")
-@ViewScoped
+@RequestScoped
 public class User implements Serializable {
     private String firstName = "Test";
     private String lastName;
     private String dob;
     private String phone;
+    private String country;
+
+    public List<String> countryList() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("India");
+        list.add("Australia");
+        list.add("Germany");
+        list.add("Italy");
+        list.add("United States");
+        list.add("Russia");
+        return list;
+    }
 
     public String getEmail() {
         return email;
@@ -60,10 +75,23 @@ public class User implements Serializable {
         this.dob = dob;
     }
 
-    public void showDetails() {
+    public String showDetails() {
         System.out.println(firstName + " " + lastName + " " + dob);
         FacesMessage msg = new FacesMessage("Successful", "Welcome :" + this.getFirstName() + " " + this.getLastName() + " " + dob + " " + phone);
         FacesContext.getCurrentInstance().addMessage("growl", msg);
+        return "userDetails";
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage("growl", message);
     }
 }
-
